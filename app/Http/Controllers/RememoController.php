@@ -17,4 +17,17 @@ class RememoController extends Controller
         $memos = Rememo::all();
         return view('rememos.index', ['memos' => $memos]);
     }
+    public function create()
+    {
+        return view('rememos.create');
+    }
+
+    public function store(Request $request)
+    {
+        $memo = new Rememo;
+        $memo->title = $request->title;
+        $memo->body = $request->body;
+        $memo->save();
+        return redirect(route("rememos.index"));
+    }
 }
