@@ -77,6 +77,7 @@ class RememoController extends Controller
         // 登録したらindexに戻る
         return redirect(route("rememos.index"));
     }
+    
     public function destroy($id)
     {
         $memo = Rememo::find($id);
