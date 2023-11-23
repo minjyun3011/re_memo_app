@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rememo;
-use Illuminate\Http\Request;
+use App\Http\Requests\RememoRequest;
+use Illuminate\Support\Facades\Validator;
 
 class RememoController extends Controller
 {
@@ -22,8 +23,20 @@ class RememoController extends Controller
         return view('rememos.create');
     }
 
-    public function store(Request $request)
+    public function store(RememoRequest $request)
     {
+        $validator = Validator::make($request->all(), [
+            'your_field' => 'required|custom_validation_rule',
+        ], [], [
+            'custom_validation_rule' => __('custom-validation.custom_validation_rule'),
+        ]);
+
+        if ($validator->fails()) {
+            // バリデーションエラーの場合の処理
+            return redirect(route("rememos.create"))
+                ->withErrors($validator)
+                ->withInput();
+        }
         $memo = new Rememo;
         $memo->title = $request->title;
         $memo->body = $request->body;
@@ -37,8 +50,20 @@ class RememoController extends Controller
         return view('rememos.edit', ['memo' => $memo]);
     }
 
-    public function update(Request $request, $id)
+    public function update(RememoRequest $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'your_field' => 'required|custom_validation_rule',
+        ], [], [
+            'custom_validation_rule' => __('custom-validation.custom_validation_rule'),
+        ]);
+
+        if ($validator->fails()) {
+            // バリデーションエラーの場合の処理
+            return redirect(route("rememos.create"))
+                ->withErrors($validator)
+                ->withInput();
+        }
         // ここはidで探して持ってくる以外はstoreと同じ
         $memo = Rememo::find($id);
 
